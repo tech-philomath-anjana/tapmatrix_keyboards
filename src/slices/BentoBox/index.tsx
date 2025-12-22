@@ -50,12 +50,15 @@ type BentoBoxItemProps = {
 
 function BentoBoxItem({ item }: BentoBoxItemProps) {
   return (
-    <div
+      <div
       className={clsx(
         "relative overflow-hidden rounded-3xl",
-        item.size === "Small" && "md:col-span-2",
-        item.size === "Medium" && "md:col-span-3",
-        item.size === "Large" && "md:col-span-4",
+        // Select options in the generated types include trailing spaces, so
+        // normalize by trimming before comparing. This avoids type mismatches
+        // if the string in the CMS contains extra spaces.
+        (typeof item.size === "string" ? item.size.trim() : (item.size as any)).trim() === "Small" && "md:col-span-2",
+        (typeof item.size === "string" ? item.size.trim() : (item.size as any)).trim() === "Medium" && "md:col-span-3",
+        (typeof item.size === "string" ? item.size.trim() : (item.size as any)).trim() === "Large" && "md:col-span-4",
       )}
     >
       <PrismicNextImage
