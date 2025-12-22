@@ -1669,94 +1669,100 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
     const extrudeGroupRef = useRef<THREE.Group>(null);
 
     // Individual key refs - for precise animation control
-    const keyRefs = {
-      // Function row
-      esc: useRef<THREE.Mesh>(null),
-      f1: useRef<THREE.Mesh>(null),
-      f2: useRef<THREE.Mesh>(null),
-      f3: useRef<THREE.Mesh>(null),
-      f4: useRef<THREE.Mesh>(null),
-      f5: useRef<THREE.Mesh>(null),
-      f6: useRef<THREE.Mesh>(null),
-      f7: useRef<THREE.Mesh>(null),
-      f8: useRef<THREE.Mesh>(null),
-      f9: useRef<THREE.Mesh>(null),
-      f10: useRef<THREE.Mesh>(null),
-      f11: useRef<THREE.Mesh>(null),
-      f12: useRef<THREE.Mesh>(null),
-      del: useRef<THREE.Mesh>(null),
-      // Number row
-      grave: useRef<THREE.Mesh>(null),
-      one: useRef<THREE.Mesh>(null),
-      two: useRef<THREE.Mesh>(null),
-      three: useRef<THREE.Mesh>(null),
-      four: useRef<THREE.Mesh>(null),
-      five: useRef<THREE.Mesh>(null),
-      six: useRef<THREE.Mesh>(null),
-      seven: useRef<THREE.Mesh>(null),
-      eight: useRef<THREE.Mesh>(null),
-      nine: useRef<THREE.Mesh>(null),
-      zero: useRef<THREE.Mesh>(null),
-      dash: useRef<THREE.Mesh>(null),
-      equal: useRef<THREE.Mesh>(null),
-      backspace: useRef<THREE.Mesh>(null),
-      // Top letter row
-      tab: useRef<THREE.Mesh>(null),
-      q: useRef<THREE.Mesh>(null),
-      w: useRef<THREE.Mesh>(null),
-      e: useRef<THREE.Mesh>(null),
-      r: useRef<THREE.Mesh>(null),
-      t: useRef<THREE.Mesh>(null),
-      y: useRef<THREE.Mesh>(null),
-      u: useRef<THREE.Mesh>(null),
-      i: useRef<THREE.Mesh>(null),
-      o: useRef<THREE.Mesh>(null),
-      p: useRef<THREE.Mesh>(null),
-      lsquarebracket: useRef<THREE.Mesh>(null),
-      rsquarebracket: useRef<THREE.Mesh>(null),
-      backslash: useRef<THREE.Mesh>(null),
-      // Home row
-      caps: useRef<THREE.Mesh>(null),
-      a: useRef<THREE.Mesh>(null),
-      s: useRef<THREE.Mesh>(null),
-      d: useRef<THREE.Mesh>(null),
-      f: useRef<THREE.Mesh>(null),
-      g: useRef<THREE.Mesh>(null),
-      h: useRef<THREE.Mesh>(null),
-      j: useRef<THREE.Mesh>(null),
-      k: useRef<THREE.Mesh>(null),
-      l: useRef<THREE.Mesh>(null),
-      semicolon: useRef<THREE.Mesh>(null),
-      quote: useRef<THREE.Mesh>(null),
-      enter: useRef<THREE.Mesh>(null),
-      pageup: useRef<THREE.Mesh>(null),
-      // Bottom row
-      lshift: useRef<THREE.Mesh>(null),
-      z: useRef<THREE.Mesh>(null),
-      x: useRef<THREE.Mesh>(null),
-      c: useRef<THREE.Mesh>(null),
-      v: useRef<THREE.Mesh>(null),
-      b: useRef<THREE.Mesh>(null),
-      n: useRef<THREE.Mesh>(null),
-      m: useRef<THREE.Mesh>(null),
-      comma: useRef<THREE.Mesh>(null),
-      period: useRef<THREE.Mesh>(null),
-      slash: useRef<THREE.Mesh>(null),
-      rshift: useRef<THREE.Mesh>(null),
-      arrowup: useRef<THREE.Mesh>(null),
-      pagedown: useRef<THREE.Mesh>(null),
-      // Modifier row
-      lcontrol: useRef<THREE.Mesh>(null),
-      lwin: useRef<THREE.Mesh>(null),
-      lalt: useRef<THREE.Mesh>(null),
-      space: useRef<THREE.Mesh>(null),
-      ralt: useRef<THREE.Mesh>(null),
-      fn: useRef<THREE.Mesh>(null),
-      arrowleft: useRef<THREE.Mesh>(null),
-      arrowdown: useRef<THREE.Mesh>(null),
-      arrowright: useRef<THREE.Mesh>(null),
-      end: useRef<THREE.Mesh>(null),
-    };
+    // Create the mapping inside a single useRef so the refs are created once
+    // and the object identity remains stable across renders. This prevents
+    // ESLint/react-hooks from warning about refs being (re)created or accessed
+    // during render.
+    const keyRefs = useRef<Record<string, React.RefObject<THREE.Mesh | null>>>(
+      {
+        // Function row
+        esc: React.createRef<THREE.Mesh>(),
+        f1: React.createRef<THREE.Mesh>(),
+        f2: React.createRef<THREE.Mesh>(),
+        f3: React.createRef<THREE.Mesh>(),
+        f4: React.createRef<THREE.Mesh>(),
+        f5: React.createRef<THREE.Mesh>(),
+        f6: React.createRef<THREE.Mesh>(),
+        f7: React.createRef<THREE.Mesh>(),
+        f8: React.createRef<THREE.Mesh>(),
+        f9: React.createRef<THREE.Mesh>(),
+        f10: React.createRef<THREE.Mesh>(),
+        f11: React.createRef<THREE.Mesh>(),
+        f12: React.createRef<THREE.Mesh>(),
+        del: React.createRef<THREE.Mesh>(),
+        // Number row
+        grave: React.createRef<THREE.Mesh>(),
+        one: React.createRef<THREE.Mesh>(),
+        two: React.createRef<THREE.Mesh>(),
+        three: React.createRef<THREE.Mesh>(),
+        four: React.createRef<THREE.Mesh>(),
+        five: React.createRef<THREE.Mesh>(),
+        six: React.createRef<THREE.Mesh>(),
+        seven: React.createRef<THREE.Mesh>(),
+        eight: React.createRef<THREE.Mesh>(),
+        nine: React.createRef<THREE.Mesh>(),
+        zero: React.createRef<THREE.Mesh>(),
+        dash: React.createRef<THREE.Mesh>(),
+        equal: React.createRef<THREE.Mesh>(),
+        backspace: React.createRef<THREE.Mesh>(),
+        // Top letter row
+        tab: React.createRef<THREE.Mesh>(),
+        q: React.createRef<THREE.Mesh>(),
+        w: React.createRef<THREE.Mesh>(),
+        e: React.createRef<THREE.Mesh>(),
+        r: React.createRef<THREE.Mesh>(),
+        t: React.createRef<THREE.Mesh>(),
+        y: React.createRef<THREE.Mesh>(),
+        u: React.createRef<THREE.Mesh>(),
+        i: React.createRef<THREE.Mesh>(),
+        o: React.createRef<THREE.Mesh>(),
+        p: React.createRef<THREE.Mesh>(),
+        lsquarebracket: React.createRef<THREE.Mesh>(),
+        rsquarebracket: React.createRef<THREE.Mesh>(),
+        backslash: React.createRef<THREE.Mesh>(),
+        // Home row
+        caps: React.createRef<THREE.Mesh>(),
+        a: React.createRef<THREE.Mesh>(),
+        s: React.createRef<THREE.Mesh>(),
+        d: React.createRef<THREE.Mesh>(),
+        f: React.createRef<THREE.Mesh>(),
+        g: React.createRef<THREE.Mesh>(),
+        h: React.createRef<THREE.Mesh>(),
+        j: React.createRef<THREE.Mesh>(),
+        k: React.createRef<THREE.Mesh>(),
+        l: React.createRef<THREE.Mesh>(),
+        semicolon: React.createRef<THREE.Mesh>(),
+        quote: React.createRef<THREE.Mesh>(),
+        enter: React.createRef<THREE.Mesh>(),
+        pageup: React.createRef<THREE.Mesh>(),
+        // Bottom row
+        lshift: React.createRef<THREE.Mesh>(),
+        z: React.createRef<THREE.Mesh>(),
+        x: React.createRef<THREE.Mesh>(),
+        c: React.createRef<THREE.Mesh>(),
+        v: React.createRef<THREE.Mesh>(),
+        b: React.createRef<THREE.Mesh>(),
+        n: React.createRef<THREE.Mesh>(),
+        m: React.createRef<THREE.Mesh>(),
+        comma: React.createRef<THREE.Mesh>(),
+        period: React.createRef<THREE.Mesh>(),
+        slash: React.createRef<THREE.Mesh>(),
+        rshift: React.createRef<THREE.Mesh>(),
+        arrowup: React.createRef<THREE.Mesh>(),
+        pagedown: React.createRef<THREE.Mesh>(),
+        // Modifier row
+        lcontrol: React.createRef<THREE.Mesh>(),
+        lwin: React.createRef<THREE.Mesh>(),
+        lalt: React.createRef<THREE.Mesh>(),
+        space: React.createRef<THREE.Mesh>(),
+        ralt: React.createRef<THREE.Mesh>(),
+        fn: React.createRef<THREE.Mesh>(),
+        arrowleft: React.createRef<THREE.Mesh>(),
+        arrowdown: React.createRef<THREE.Mesh>(),
+        arrowright: React.createRef<THREE.Mesh>(),
+        end: React.createRef<THREE.Mesh>(),
+      }
+    );
 
     // Expose refs to parent component through imperative handle
     useImperativeHandle(ref, () => ({
@@ -1797,7 +1803,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                 <group position={[-0.092, 0, 0]}>
                   <group position={[0.019, 0, 0]}>
                     <mesh
-                      ref={keyRefs.f1}
+                      ref={keyRefs.current.f1}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_3.geometry}
@@ -1817,7 +1823,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.037, 0, 0]}>
                     <mesh
-                      ref={keyRefs.f2}
+                      ref={keyRefs.current.f2}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_4.geometry}
@@ -1836,7 +1842,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.056, 0, 0]}>
                     <mesh
-                      ref={keyRefs.f3}
+                      ref={keyRefs.current.f3}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_5.geometry}
@@ -1854,7 +1860,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                     />
                   </group>
                   <mesh
-                    ref={keyRefs.esc}
+                    ref={keyRefs.current.esc}
                     castShadow
                     receiveShadow
                     geometry={nodes.Boole_2_2.geometry}
@@ -1874,7 +1880,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                 <group position={[-0.008, 0, 0]}>
                   <group position={[0.018, 0, 0]}>
                     <mesh
-                      ref={keyRefs.f4}
+                      ref={keyRefs.current.f4}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_7.geometry}
@@ -1893,7 +1899,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.037, 0, 0]}>
                     <mesh
-                      ref={keyRefs.f5}
+                      ref={keyRefs.current.f5}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_8.geometry}
@@ -1912,7 +1918,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.055, 0, 0]}>
                     <mesh
-                      ref={keyRefs.f6}
+                      ref={keyRefs.current.f6}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_9.geometry}
@@ -1949,7 +1955,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                 <group position={[0.076, 0, 0]}>
                   <group position={[0.019, 0, 0]}>
                     <mesh
-                      ref={keyRefs.f9}
+                      ref={keyRefs.current.f9}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_11.geometry}
@@ -1968,7 +1974,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.037, 0, 0]}>
                     <mesh
-                      ref={keyRefs.f10}
+                      ref={keyRefs.current.f10}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_12.geometry}
@@ -1987,7 +1993,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.056, 0, 0]}>
                     <mesh
-                      ref={keyRefs.f11}
+                      ref={keyRefs.current.f11}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_13.geometry}
@@ -2005,7 +2011,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                     />
                   </group>
                   <mesh
-                    ref={keyRefs.f7}
+                    ref={keyRefs.current.f7}
                     castShadow
                     receiveShadow
                     geometry={nodes.Boole_2_10.geometry}
@@ -2025,7 +2031,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                 <group position={[0.153, 0, 0]}>
                   <group position={[0.018, 0, 0]}>
                     <mesh
-                      ref={keyRefs.f12}
+                      ref={keyRefs.current.f12}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_15.geometry}
@@ -2044,7 +2050,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.037, 0, 0]}>
                     <mesh
-                      ref={keyRefs.del}
+                      ref={keyRefs.current.del}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_16.geometry}
@@ -2062,7 +2068,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                     />
                   </group>
                   <mesh
-                    ref={keyRefs.f8}
+                    ref={keyRefs.current.f8}
                     castShadow
                     receiveShadow
                     geometry={nodes.Boole_2_14.geometry}
@@ -2125,7 +2131,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
               <group position={[0.008, -0.029, 0]} ref={keycapRow2Ref}>
                 <group position={[0.119, 0, 0]}>
                   <mesh
-                    ref={keyRefs.backspace}
+                    ref={keyRefs.current.backspace}
                     castShadow
                     receiveShadow
                     geometry={nodes.Boole_2_18.geometry}
@@ -2192,7 +2198,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                 <group position={[0.153, 0, 0]}>
                   <group position={[0.019, 0, 0]}>
                     <mesh
-                      ref={keyRefs.equal}
+                      ref={keyRefs.current.equal}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_33.geometry}
@@ -2211,7 +2217,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.037, 0, 0]}>
                     <mesh
-                      ref={keyRefs.pageup}
+                      ref={keyRefs.current.pageup}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_34.geometry}
@@ -2229,7 +2235,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                     />
                   </group>
                   <mesh
-                    ref={keyRefs.dash}
+                    ref={keyRefs.current.dash}
                     castShadow
                     receiveShadow
                     geometry={nodes.Boole_2_32.geometry}
@@ -2249,7 +2255,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                 <group position={[-0.129, 0, 0]}>
                   <group position={[0.037, 0, 0]}>
                     <mesh
-                      ref={keyRefs.one}
+                      ref={keyRefs.current.one}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_21.geometry}
@@ -2268,7 +2274,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.112, 0, 0]}>
                     <mesh
-                      ref={keyRefs.five}
+                      ref={keyRefs.current.five}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_25.geometry}
@@ -2287,7 +2293,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.186, 0, 0]}>
                     <mesh
-                      ref={keyRefs.nine}
+                      ref={keyRefs.current.nine}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_29.geometry}
@@ -2306,7 +2312,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.019, 0, 0]}>
                     <mesh
-                      ref={keyRefs.grave}
+                      ref={keyRefs.current.grave}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_20.geometry}
@@ -2325,7 +2331,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.056, 0, 0]}>
                     <mesh
-                      ref={keyRefs.two}
+                      ref={keyRefs.current.two}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_22.geometry}
@@ -2344,7 +2350,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.074, 0, 0]}>
                     <mesh
-                      ref={keyRefs.three}
+                      ref={keyRefs.current.three}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_23.geometry}
@@ -2363,7 +2369,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.093, 0, 0]}>
                     <mesh
-                      ref={keyRefs.four}
+                      ref={keyRefs.current.four}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_24.geometry}
@@ -2382,7 +2388,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.13, 0, 0]}>
                     <mesh
-                      ref={keyRefs.six}
+                      ref={keyRefs.current.six}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_26.geometry}
@@ -2401,7 +2407,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.149, 0, 0]}>
                     <mesh
-                      ref={keyRefs.seven}
+                      ref={keyRefs.current.seven}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_27.geometry}
@@ -2420,7 +2426,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.168, 0, 0]}>
                     <mesh
-                      ref={keyRefs.eight}
+                      ref={keyRefs.current.eight}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_28.geometry}
@@ -2439,7 +2445,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.205, 0, 0]}>
                     <mesh
-                      ref={keyRefs.zero}
+                      ref={keyRefs.current.zero}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_30.geometry}
@@ -2497,7 +2503,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                 <group position={[0.122, 0, 0]}>
                   <group position={[0.004, 0, 0.001]}>
                     <mesh
-                      ref={keyRefs.tab}
+                      ref={keyRefs.current.tab}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_36.geometry}
@@ -2518,7 +2524,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                 <group position={[0.153, 0, 0]}>
                   <group position={[0.019, 0, 0]}>
                     <mesh
-                      ref={keyRefs.lsquarebracket}
+                      ref={keyRefs.current.lsquarebracket}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_50.geometry}
@@ -2537,7 +2543,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.037, 0, 0]}>
                     <mesh
-                      ref={keyRefs.rsquarebracket}
+                      ref={keyRefs.current.rsquarebracket}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_51.geometry}
@@ -2555,7 +2561,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                     />
                   </group>
                   <mesh
-                    ref={keyRefs.p}
+                    ref={keyRefs.current.p}
                     castShadow
                     receiveShadow
                     geometry={nodes.Boole_2_49.geometry}
@@ -2575,7 +2581,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                 <group position={[-0.101, 0, 0]}>
                   <group position={[0.186, 0, 0]}>
                     <mesh
-                      ref={keyRefs.i}
+                      ref={keyRefs.current.i}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_47.geometry}
@@ -2594,7 +2600,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.205, 0, 0]}>
                     <mesh
-                      ref={keyRefs.o}
+                      ref={keyRefs.current.o}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_48.geometry}
@@ -2613,7 +2619,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.037, 0, 0]}>
                     <mesh
-                      ref={keyRefs.q}
+                      ref={keyRefs.current.q}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_39.geometry}
@@ -2632,7 +2638,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.13, 0, 0]}>
                     <mesh
-                      ref={keyRefs.t}
+                      ref={keyRefs.current.t}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_44.geometry}
@@ -2649,9 +2655,9 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                       rotation={[-Math.PI / 2, Math.PI / 2, 0]}
                     />
                   </group>
-                  <group position={[0.149, 0, 0]}>
+                    <group position={[0.149, 0, 0]}>
                     <mesh
-                      ref={keyRefs.y}
+                      ref={keyRefs.current.y}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_45.geometry}
@@ -2668,9 +2674,9 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                       rotation={[-Math.PI / 2, Math.PI / 2, 0]}
                     />
                   </group>
-                  <group position={[0.168, 0, 0]}>
+                    <group position={[0.168, 0, 0]}>
                     <mesh
-                      ref={keyRefs.u}
+                      ref={keyRefs.current.u}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_46.geometry}
@@ -2689,7 +2695,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.056, 0, 0]}>
                     <mesh
-                      ref={keyRefs.w}
+                      ref={keyRefs.current.w}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_40.geometry}
@@ -2708,7 +2714,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.074, 0, 0]}>
                     <mesh
-                      ref={keyRefs.e}
+                      ref={keyRefs.current.e}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_41.geometry}
@@ -2727,7 +2733,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.112, 0, 0]}>
                     <mesh
-                      ref={keyRefs.r}
+                      ref={keyRefs.current.r}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_43.geometry}
@@ -2800,7 +2806,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                 <group position={[-0.129, 0, 0]}>
                   <group position={[0.004, 0, 0.001]}>
                     <mesh
-                      ref={keyRefs.backslash}
+                      ref={keyRefs.current.backslash}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_35.geometry}
@@ -2823,7 +2829,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
               <group position={[0.008, 0.01, 0]} ref={keycapRow4Ref}>
                 <group position={[-0.119, 0, 0]}>
                   <mesh
-                    ref={keyRefs.caps}
+                    ref={keyRefs.current.caps}
                     castShadow
                     receiveShadow
                     geometry={nodes.Boole_2_52.geometry}
@@ -2843,7 +2849,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                 <group position={[-0.097, 0, 0]}>
                   <group position={[0.037, 0, 0]}>
                     <mesh
-                      ref={keyRefs.a}
+                      ref={keyRefs.current.a}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_56.geometry}
@@ -2862,7 +2868,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.056, 0, 0]}>
                     <mesh
-                      ref={keyRefs.f}
+                      ref={keyRefs.current.f}
                       castShadow
                       receiveShadow
                       geometry={nodes.f_mark.geometry}
@@ -2889,7 +2895,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.075, 0, 0]}>
                     <mesh
-                      ref={keyRefs.g}
+                      ref={keyRefs.current.g}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_58.geometry}
@@ -2908,7 +2914,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.093, 0, 0]}>
                     <mesh
-                      ref={keyRefs.h}
+                      ref={keyRefs.current.h}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_59.geometry}
@@ -2927,7 +2933,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.112, 0, 0]}>
                     <mesh
-                      ref={keyRefs.j}
+                      ref={keyRefs.current.j}
                       castShadow
                       receiveShadow
                       geometry={nodes.j_mark.geometry}
@@ -2954,7 +2960,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.131, 0, 0]}>
                     <mesh
-                      ref={keyRefs.k}
+                      ref={keyRefs.current.k}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_61.geometry}
@@ -2973,7 +2979,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.149, 0, 0]}>
                     <mesh
-                      ref={keyRefs.l}
+                      ref={keyRefs.current.l}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_62.geometry}
@@ -2992,7 +2998,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.187, 0, 0]}>
                     <mesh
-                      ref={keyRefs.quote}
+                      ref={keyRefs.current.quote}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_64.geometry}
@@ -3011,7 +3017,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.168, 0, 0]}>
                     <mesh
-                      ref={keyRefs.semicolon}
+                      ref={keyRefs.current.semicolon}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_63.geometry}
@@ -3030,7 +3036,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.019, 0, 0]}>
                     <mesh
-                      ref={keyRefs.s}
+                      ref={keyRefs.current.s}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_55.geometry}
@@ -3048,7 +3054,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                     />
                   </group>
                   <mesh
-                    ref={keyRefs.d}
+                    ref={keyRefs.current.d}
                     castShadow
                     receiveShadow
                     geometry={nodes.Boole_2_54.geometry}
@@ -3067,7 +3073,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                 </group>
                 <group position={[0.12, 0, 0]}>
                   <mesh
-                    ref={keyRefs.enter}
+                    ref={keyRefs.current.enter}
                     castShadow
                     receiveShadow
                     geometry={nodes.Boole_2_53.geometry}
@@ -3137,7 +3143,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                 <group position={[-0.088, 0, 0]}>
                   <group position={[0.019, 0, 0]}>
                     <mesh
-                      ref={keyRefs.z}
+                      ref={keyRefs.current.z}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_68.geometry}
@@ -3156,7 +3162,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.037, 0, 0]}>
                     <mesh
-                      ref={keyRefs.x}
+                      ref={keyRefs.current.x}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_69.geometry}
@@ -3175,7 +3181,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.056, 0, 0]}>
                     <mesh
-                      ref={keyRefs.c}
+                      ref={keyRefs.current.c}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_70.geometry}
@@ -3194,7 +3200,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.075, 0, 0]}>
                     <mesh
-                      ref={keyRefs.v}
+                      ref={keyRefs.current.v}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_71.geometry}
@@ -3213,7 +3219,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.093, 0, 0]}>
                     <mesh
-                      ref={keyRefs.b}
+                      ref={keyRefs.current.b}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_72.geometry}
@@ -3232,7 +3238,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.112, 0, 0]}>
                     <mesh
-                      ref={keyRefs.n}
+                      ref={keyRefs.current.n}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_73.geometry}
@@ -3251,7 +3257,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.131, 0, 0]}>
                     <mesh
-                      ref={keyRefs.m}
+                      ref={keyRefs.current.m}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_74.geometry}
@@ -3270,7 +3276,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.15, 0, 0]}>
                     <mesh
-                      ref={keyRefs.comma}
+                      ref={keyRefs.current.comma}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_75.geometry}
@@ -3289,7 +3295,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.168, 0, 0]}>
                     <mesh
-                      ref={keyRefs.period}
+                      ref={keyRefs.current.period}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_76.geometry}
@@ -3307,7 +3313,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                     />
                   </group>
                   <mesh
-                    ref={keyRefs.slash}
+                    ref={keyRefs.current.slash}
                     castShadow
                     receiveShadow
                     geometry={nodes.Boole_2_67.geometry}
@@ -3326,7 +3332,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                 </group>
                 <group position={[-0.118, 0, 0]}>
                   <mesh
-                    ref={keyRefs.lshift}
+                    ref={keyRefs.current.lshift}
                     castShadow
                     receiveShadow
                     geometry={nodes.Boole_2_65.geometry}
@@ -3392,7 +3398,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                 </group>
                 <group position={[0.172, 0, 0]}>
                   <mesh
-                    ref={keyRefs.arrowup}
+                    ref={keyRefs.current.arrowup}
                     castShadow
                     receiveShadow
                     geometry={nodes.Boole_2_77.geometry}
@@ -3411,7 +3417,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                 </group>
                 <group position={[0.11, 0, 0]}>
                   <mesh
-                    ref={keyRefs.rshift}
+                    ref={keyRefs.current.rshift}
                     castShadow
                     receiveShadow
                     geometry={nodes.Boole_2_66.geometry}
@@ -3480,7 +3486,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                 <group position={[0.105, 0, 0]}>
                   <group position={[0.07, 0, 0]}>
                     <mesh
-                      ref={keyRefs.pagedown}
+                      ref={keyRefs.current.pagedown}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_85.geometry}
@@ -3499,7 +3505,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.023, 0, 0]}>
                     <mesh
-                      ref={keyRefs.arrowleft}
+                      ref={keyRefs.current.arrowleft}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_83.geometry}
@@ -3518,7 +3524,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.047, 0, 0]}>
                     <mesh
-                      ref={keyRefs.arrowright}
+                      ref={keyRefs.current.arrowright}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_84.geometry}
@@ -3536,7 +3542,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                     />
                   </group>
                   <mesh
-                    ref={keyRefs.arrowdown}
+                    ref={keyRefs.current.arrowdown}
                     castShadow
                     receiveShadow
                     geometry={nodes.Boole_2_82.geometry}
@@ -3556,7 +3562,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                 <group position={[0.201, 0, 0]}>
                   <group position={[0.037, 0, 0]}>
                     <mesh
-                      ref={keyRefs.ralt}
+                      ref={keyRefs.current.ralt}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_88.geometry}
@@ -3575,7 +3581,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.019, 0, 0]}>
                     <mesh
-                      ref={keyRefs.fn}
+                      ref={keyRefs.current.fn}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_87.geometry}
@@ -3593,7 +3599,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                     />
                   </group>
                   <mesh
-                    ref={keyRefs.end}
+                    ref={keyRefs.current.end}
                     castShadow
                     receiveShadow
                     geometry={nodes.Boole_2_86.geometry}
@@ -3613,7 +3619,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                 <group position={[-0.081, 0, 0]}>
                   <group position={[0.046, 0, 0]}>
                     <mesh
-                      ref={keyRefs.lcontrol}
+                      ref={keyRefs.current.lcontrol}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_81.geometry}
@@ -3632,7 +3638,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.023, 0, 0]}>
                     <mesh
-                      ref={keyRefs.lwin}
+                      ref={keyRefs.current.lwin}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_80.geometry}
@@ -3651,7 +3657,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                   </group>
                   <group position={[0.002, 0, 0.002]}>
                     <mesh
-                      ref={keyRefs.lalt}
+                      ref={keyRefs.current.lalt}
                       castShadow
                       receiveShadow
                       geometry={nodes.Boole_2_79.geometry}
@@ -3671,7 +3677,7 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
                 </group>
                 <group position={[0.035, 0, 0]}>
                   <mesh
-                    ref={keyRefs.space}
+                    ref={keyRefs.current.space}
                     castShadow
                     receiveShadow
                     geometry={nodes.Boole_2_78.geometry}
