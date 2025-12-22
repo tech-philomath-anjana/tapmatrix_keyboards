@@ -1784,7 +1784,10 @@ export const Keyboard = forwardRef<KeyboardRef, JSX.IntrinsicElements["group"]>(
         row4: keycapRow4Ref,
         row5: keycapRow5Ref,
       },
-      keys: keyRefs,
+  // Provide the underlying mapping object (keyRefs.current) so the
+  // `keys` property matches the expected index-signature shape
+  // `{ [key: string]: RefObject<THREE.Mesh | null> }`.
+  keys: keyRefs.current,
       switchComponents: {}, // Empty for now - can be populated later for advanced animations
       extrudeGroup: extrudeGroupRef,
     }));
