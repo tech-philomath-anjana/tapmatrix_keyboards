@@ -1,0 +1,41 @@
+[
+  {
+    "__TYPE__": "SharedSliceContent",
+    "variation": "default",
+    "primary": {
+      "eyebrow": {
+        "__TYPE__": "FieldContent",
+        "value": "acres",
+        "type": "Text"
+      },
+      "heading": {
+        "__TYPE__": "StructuredTextContent",
+        "value": [
+          {
+            "type": "heading2",
+            "content": {
+              "text": "Example"
+            }
+          }
+        ]
+      },
+      "purchase_cta_button_text": {
+        "__TYPE__": "FieldContent",
+        "value": "industrial",
+        "type": "Text"
+      },
+      "body": {
+        "__TYPE__": "StructuredTextContent",
+        "value": [
+          {
+            "type": "paragraph",
+            "content": {
+              "text": "Culpa ullamco ut do culpa pariatur ut. Nulla eu ad labore do veniam. Ex ea nostrud exercitation tempor cupidatat ullamco laborum."
+            }
+          }
+        ]
+      }
+    },
+    "items": []
+  }
+]

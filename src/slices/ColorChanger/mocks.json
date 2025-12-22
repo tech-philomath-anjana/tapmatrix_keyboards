@@ -1,0 +1,31 @@
+[
+  {
+    "__TYPE__": "SharedSliceContent",
+    "variation": "default",
+    "primary": {
+      "heading": {
+        "__TYPE__": "StructuredTextContent",
+        "value": [
+          {
+            "type": "heading2",
+            "content": {
+              "text": "Check"
+            }
+          }
+        ]
+      },
+      "description": {
+        "__TYPE__": "StructuredTextContent",
+        "value": [
+          {
+            "type": "paragraph",
+            "content": {
+              "text": "Non sint excepteur sint voluptate velit aute. Ipsum ex eiusmod ad consequat commodo aliquip. Eu velit commodo deserunt."
+            }
+          }
+        ]
+      }
+    },
+    "items": []
+  }
+]

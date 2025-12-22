@@ -1,26 +1,73 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-roboto-flex), Arial, Helvetica, sans-serif;
+
+  --font-black-slanted: var(--font-roboto-flex);
+  --font-black-slanted--font-variation-settings:
+    "wdth" var(--wdth, 100), "slnt" var(--slnt, -10), "opsz" var(--opsz, 144),
+    "wght" var(--wght, 1000);
+
+  --font-bold-slanted: var(--font-roboto-flex);
+  --font-bold-slanted--font-variation-settings:
+    "wdth" var(--wdth, 74), "slnt" var(--slnt, -10), "opsz" var(--opsz, 100),
+    "wght" var(--wght, 600);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.animate-marquee {
+  animation-name: marquee;
+  animation-duration: 30s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+}
+
+.site-gradient {
+  background: linear-gradient(
+    to left,
+    #000000,
+    #363533,
+    #555a5d,
+    #95938c,
+    #d1ccbf,
+    #ffffff
+  );
+}
+
+/* Option outline: draws a rounded gradient outline only (transparent center)
+   Uses CSS variables --outline-thickness and --outline-radius for tuning. */
+.option-outline {
+  position: relative;
+  --outline-thickness: 6px; /* default thickness (changeable via inline style) */
+  --outline-radius: 12px; /* default outer radius */
+}
+
+.option-outline::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: var(--outline-radius);
+  padding: var(--outline-thickness); /* creates the ring thickness */
+  background: conic-gradient(from 0deg, #ff2ecf, #ff8f2a, #ffc933, #ff2ecf);
+  /* mask-out the center so only the ring shows */
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
 }
