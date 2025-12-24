@@ -93,11 +93,11 @@ const PurchaseCtaButton: FC<PurchaseCtaButtonProps> = ({ slice }) => {
         className="relative mx-auto max-w-7xl px-4 text-center"
         targetChildren
       >
-        <p className="mb-6 text-xl font-medium text-gray-700 md:text-2xl">
+        <p className="mb-6 text-base sm:text-lg font-medium text-gray-700 md:text-2xl">
           {slice.primary.eyebrow}
         </p>
 
-        <h2 className="font-bold-slanted mb-8 scroll-pt-6 text-5xl text-gray-900 uppercase md:text-7xl lg:text-8xl">
+        <h2 className="font-bold-slanted mb-8 scroll-pt-6 text-3xl sm:text-4xl text-gray-900 uppercase md:text-7xl lg:text-8xl">
           <PrismicText field={slice.primary.heading} />
         </h2>
         <button
@@ -105,7 +105,9 @@ const PurchaseCtaButton: FC<PurchaseCtaButtonProps> = ({ slice }) => {
           onClick={handlePurchaseClick}
           disabled={isPressed}
           className={clsx(
-            "group relative w-full overflow-hidden rounded-full border-8 border-gray-900 bg-linear-to-r from-[#FF2ECF] via-[#FF8F2A] to-[#FFC933] px-8 py-6 ease-out focus:ring-24 focus:ring-[#FF8F2A]/50 focus:outline-none motion-safe:transition-all motion-safe:duration-300 md:border-12 md:px-20 md:py-16",
+            // Reduced border thickness and increased padding on mobile for more breathing room;
+            // keep large border and padding at md+ to preserve the original desktop look.
+            "group relative w-full overflow-hidden rounded-full border-2 sm:border-4 md:border-12 border-gray-900 bg-linear-to-r from-[#FF2ECF] via-[#FF8F2A] to-[#FFC933] px-6 sm:px-8 md:px-20 py-3 sm:py-4 md:py-16 ease-out focus:ring-24 focus:ring-[#FF8F2A]/50 focus:outline-none motion-safe:transition-all motion-safe:duration-300",
             "hover:scale-105 hover:shadow-2xl hover:shadow-[#FF8F2A]/40",
             "active:scale-95",
             isPressed
@@ -119,11 +121,13 @@ const PurchaseCtaButton: FC<PurchaseCtaButtonProps> = ({ slice }) => {
             <span
               ref={textRef}
               style={{ "--wdth": 85, "--wght": 850 } as React.CSSProperties}
-              className="font-black-slanted text-4xl tracking-wide whitespace-nowrap text-black uppercase group-hover:-translate-y-1 motion-safe:transition-transform motion-safe:duration-300 md:text-5xl lg:text-6xl"
+              // Reduce font-size on small screens to add breathing room; keep
+              // larger sizes at md+ to preserve desktop appearance.
+              className="font-black-slanted text-lg sm:text-2xl tracking-wide whitespace-nowrap text-black uppercase group-hover:-translate-y-1 motion-safe:transition-transform motion-safe:duration-300 md:text-5xl lg:text-6xl"
             >
               {isPressed ? (
-                <span className="flex items-center gap-4 md:gap-6">
-                  <LuLoader className="size-12 animate-spin text-black md:size-16" />
+                <span className="flex items-center gap-2 sm:gap-4 md:gap-6">
+                  <LuLoader className="size-6 sm:size-10 md:size-16 animate-spin text-black" />
                   Loading...
                 </span>
               ) : (
@@ -132,7 +136,7 @@ const PurchaseCtaButton: FC<PurchaseCtaButtonProps> = ({ slice }) => {
             </span>
             {!isPressed && (
               <div className="hidden group-hover:translate-x-2 group-hover:scale-125 motion-safe:transition-all motion-safe:duration-300 md:block">
-                <LuChevronRight className="size-12 text-black md:size-16" />
+                <LuChevronRight className="size-8 text-black md:size-16" />
               </div>
             )}
           </div>

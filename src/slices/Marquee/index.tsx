@@ -14,13 +14,17 @@ export type MarqueeProps = SliceComponentProps<Content.MarqueeSlice>;
  */
 const Marquee: FC<MarqueeProps> = ({ slice }) => {
   const MarqueeContent = () => (
-    <div className="flex items-center bg-gray-200 py-6 whitespace-nowrap">
+    // Reduce vertical padding and large text on small screens so marquee
+    // doesn't dominate phone viewports. Preserve original huge sizes on md+.
+    <div className="flex items-center bg-gray-200 py-3 sm:py-4 whitespace-nowrap">
       {slice.primary.phrases.map((item, i) => (
         <Fragment key={i}>
-          <div className="font-bold-slanted px-14 text-[120px] leading-none text-gray-400/80 uppercase [text-box:trim-both_cap_alphabetic] md:text-[180px]">
+          <div className="font-bold-slanted px-6 sm:px-10 text-[64px] sm:text-[96px] leading-none text-gray-400/80 uppercase [text-box:trim-both_cap_alphabetic] md:text-[180px]">
             {item.text}
           </div>
-          <LogoMark width={160} height={160} className="flex-shrink-0" />
+          {/* Smaller logo for mobile, original for md+ */}
+          <LogoMark width={96} height={96} className="shrink-0 md:hidden" />
+          <LogoMark width={160} height={160} className="hidden md:shrink-0 md:block" />
         </Fragment>
       ))}
     </div>

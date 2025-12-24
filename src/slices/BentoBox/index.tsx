@@ -27,7 +27,7 @@ const BentoBox: FC<BentoBoxProps> = ({ slice }) => {
       <FadeIn>
         <h2
           id="features"
-          className="font-bold-slanted mb-8 scroll-pt-6 text-6xl uppercase md:text-8xl"
+          className="font-bold-slanted mb-8 scroll-pt-6 text-4xl sm:text-6xl uppercase md:text-8xl"
         >
           <PrismicText field={slice.primary.heading} />
         </h2>
@@ -51,8 +51,8 @@ type BentoBoxItemProps = {
 function BentoBoxItem({ item }: BentoBoxItemProps) {
   return (
       <div
-      className={clsx(
-        "relative overflow-hidden rounded-3xl",
+        className={clsx(
+          "relative overflow-hidden rounded-3xl h-56 sm:h-64 md:h-auto",
         // Select options in the generated types include trailing spaces, so
         // normalize by trimming before comparing. This avoids type mismatches
         // if the string in the CMS contains extra spaces.
@@ -70,7 +70,7 @@ function BentoBoxItem({ item }: BentoBoxItemProps) {
 
       <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-b from-transparent to-black"></div>
 
-      <div className="absolute bottom-0 left-0 max-w-xl p-6 text-xl text-balance text-white">
+      <div className="absolute bottom-0 left-0 max-w-full p-4 text-base sm:text-xl text-balance text-white">
         <PrismicRichText field={item.text} />
       </div>
     </div>

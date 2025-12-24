@@ -125,8 +125,11 @@ const ColorChanger: FC<ColorChangerProps> = ({ slice }) => {
     <section
       data-slice-type={slice.slice_type}
       data-slice-variation={slice.variation}
+      // Keep the same visual appearance but make the section far smaller on
+      // mobile so it doesn't dominate the viewport. Preserve the large
+      // desktop min-height.
       className={clsx(
-        "relative flex h-[80vh] min-h-[900px] flex-col overflow-hidden",
+        "relative flex h-auto min-h-[60vh] md:h-[80vh] md:min-h-[900px] flex-col overflow-hidden",
         sectionBgClass,
       )}
       style={sectionStyle}
@@ -159,7 +162,13 @@ const ColorChanger: FC<ColorChangerProps> = ({ slice }) => {
       <Canvas
         // Move the camera slightly back and up to better frame the keyboard
         camera={{ position: [0, 0.6, 0.9], fov: 45, zoom: 1.3 }}
-        className="-mb-[10vh] grow"
+        // Larger canvas footprint on mobile so the keyboard appears bigger.
+        // Remove the negative bottom margin on small screens so the canvas
+        // doesn't visually overlap the controls below. Keep the larger
+        // desktop negative offset so desktop visuals are unchanged.
+        // Increase the canvas height on mobile so the keyboard appears
+        // slightly bigger on phones (no desktop changes).
+        className="mb-0 md:-mb-[10vh] grow h-[68vh] sm:h-[64vh] md:h-auto"
       >
         <Scene
           selectedTextureId={selectedTextureId}
@@ -167,38 +176,32 @@ const ColorChanger: FC<ColorChangerProps> = ({ slice }) => {
         />
       </Canvas>
       <Bounded
-        className="relative shrink-0"
-        innerClassName="gap-12 lg:gap-20 flex flex-col lg:flex-row"
+        // raise controls above the canvas so they aren't visually occluded
+        // when the canvas has transforms / glows. Desktop visuals preserved.
+        className="relative shrink-0 z-10"
+        innerClassName="gap-8 lg:gap-20 flex flex-col lg:flex-row"
       >
-        <div className="max-w-md shrink-0">
+        <div className="max-w-full md:max-w-md shrink-0">
           <h2
-            className="font-bold-slanted mb-1 text-4xl uppercase lg:mb-2 lg:text-6xl lg:whitespace-nowrap"
+            className="font-bold-slanted mb-1 text-2xl sm:text-3xl md:text-4xl uppercase lg:mb-2 lg:text-6xl lg:whitespace-nowrap md:translate-x-24 transition-transform"
             style={{
-              transform: `translate(${headingOffsetX}px, ${headingOffsetY}px)`,
               transition: "transform 120ms ease",
             }}
           >
             <PrismicText field={slice.primary.heading} />
           </h2>
-          <div
-            className="text-pretty lg:text-lg"
-            style={{
-              transform: `translate(${descOffsetX}px, ${descOffsetY}px)`,
-              transition: "transform 120ms ease",
-            }}
-          >
+          <div className="text-pretty text-xs sm:text-sm lg:text-lg md:translate-x-24 transition-transform">
             <PrismicRichText field={slice.primary.description} />
           </div>
         </div>
-        <ul
-          className="grid grid-cols-2 gap-3 text-white sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-3 xl:grid-cols-6"
-          style={{
-            transform: `translate(${optionsOffsetX}px, ${optionsOffsetY}px) scale(${optionsScale})`,
-            transition: "transform 160ms ease",
-          }}
-        >
+        {/* Make the options area responsive: remove the large inline translate on
+            small screens so the grid doesn't overflow. We apply the offset only
+            at md+ via Tailwind arbitrary translate classes. */}
+        {/* On small screens show all options in a single horizontal row (scrollable).
+            At `sm`+ we switch back to the grid layout so desktop remains unchanged. */}
+        <ul className="flex gap-3 overflow-x-auto px-4 py-3 text-white sm:grid sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-3 xl:grid-cols-6 md:translate-x-40 transition-transform snap-x snap-mandatory">
           {KEYCAP_TEXTURES.map((texture) => (
-            <li key={texture.id} className="flex items-center justify-center">
+            <li key={texture.id} className="flex items-center justify-center shrink-0 snap-start px-1">
               {(() => {
                 const isSelected = selectedTextureId === texture.id;
                 const buttonStyle: React.CSSProperties = {
@@ -217,29 +220,29 @@ const ColorChanger: FC<ColorChangerProps> = ({ slice }) => {
                 // allow per-texture icon sizing (make 'cherrynavy' icon larger)
                 const iconWrapperClass =
                   texture.id === "cherrynavy"
-                    ? "relative w-[96%] h-[96%] sm:w-[92%] sm:h-[92%] md:w-[88%] md:h-[88%] lg:w-[84%] lg:h-[84%]"
-                    : "relative w-[84%] h-[84%] sm:w-[80%] sm:h-[80%] md:w-[76%] md:h-[76%] lg:w-[72%] lg:h-[72%]";
+                    ? "relative w-[86%] h-[86%] sm:w-[92%] sm:h-[92%] md:w-[88%] md:h-[88%] lg:w-[84%] lg:h-[84%]"
+                    : "relative w-[78%] h-[78%] sm:w-[80%] sm:h-[80%] md:w-[76%] md:h-[76%] lg:w-[72%] lg:h-[72%]";
 
                 return (
                   <button
                     onClick={() => handleTextureSelect(texture)}
                     disabled={isAnimating}
                     className={clsx(
-                      "option-outline relative flex h-28 w-28 flex-col items-center justify-center bg-transparent p-2 hover:scale-105 motion-safe:transition-all motion-safe:duration-300 sm:h-32 sm:w-32 md:h-36 md:w-36 lg:h-40 lg:w-40",
+                      "option-outline relative flex h-16 w-16 flex-col items-center justify-center bg-transparent p-2 hover:scale-105 motion-safe:transition-all motion-safe:duration-300 sm:h-24 sm:w-24 md:h-36 md:w-36 lg:h-40 lg:w-40",
                       isAnimating && "cursor-not-allowed opacity-50",
                     )}
                     // set CSS vars to tune thickness and radius (thinner outline)
                     style={{
                       ...buttonStyle,
-                      ["--outline-thickness" as any]: "3px",
-                      ["--outline-radius" as any]: "12px",
+                      ["--outline-thickness" as any]: "2px",
+                      ["--outline-radius" as any]: "10px",
                     }}
                   >
                     {/* inner area stays square; the outline on the button is rounded */}
                     <div className="relative z-0 mb-0 flex h-full w-full items-center justify-center overflow-hidden rounded-none bg-white/3">
                       {/* square-relative wrapper to enforce consistent icon sizing */}
                       {/* larger square wrapper so icons render bigger (responsive) */}
-                      <div className="relative h-[84%] w-[84%] sm:h-[80%] sm:w-[80%] md:h-[76%] md:w-[76%] lg:h-[72%] lg:w-[72%]">
+                      <div className="relative h-[80%] w-[80%] sm:h-[78%] sm:w-[78%] md:h-[76%] md:w-[76%] lg:h-[72%] lg:w-[72%]">
                         <Image
                           src={texture.previewPath ?? texture.path}
                           alt={texture.name}

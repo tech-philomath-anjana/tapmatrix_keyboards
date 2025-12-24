@@ -109,9 +109,9 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
             </div>
 
             <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-gray-100 py-3">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-gray-100 py-3">
                 <span className="text-gray-600">Order ID:</span>
-                <span className="font-mono text-sm text-gray-900">
+                <span className="font-mono text-sm text-gray-900 break-all mt-2 sm:mt-0">
                   {orderDetails.sessionId}
                 </span>
               </div>
