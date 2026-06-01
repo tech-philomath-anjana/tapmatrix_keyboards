@@ -1,6 +1,6 @@
 **TapMatrix**
 
-An interactive storefront for mechanical keyboards — built with Next.js, 3D product visualization, and a headless CMS.
+An interactive storefront for mechanical keyboards, built with Next.js, 3D product visualization, and a headless CMS.
 
 **What is TapMatrix?**
 
