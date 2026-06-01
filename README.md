@@ -3,6 +3,7 @@
 An interactive storefront for mechanical keyboards — built with Next.js, 3D product visualization, and a headless CMS.
 
 **What is TapMatrix?**
+
 TapMatrix is a product showcase and e-commerce site for mechanical keyboards and components. The goal was to build something that actually does justice to the tactile, visual nature of the hobby — so instead of flat product images, customers can rotate and inspect keyboards in 3D before they buy.
 The project covers the full stack: a content-managed product catalogue, interactive 3D scenes, animated page transitions, and a complete Stripe checkout flow.
 
