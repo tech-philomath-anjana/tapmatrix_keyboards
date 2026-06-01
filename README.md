@@ -29,6 +29,7 @@ Payments — Stripe
 Linting — ESLint · Prettier
 
 **Under the hood**
+
 App Router + Server Components — data fetching happens server-side wherever possible. Prismic queries and product lookups run in server components; only interactive 3D and animation layers are client components.
 Slice Machine — page sections are modelled as Prismic slices. Adding a new content block means defining a slice type and dropping it into the CMS — no new routes, no new components needed.
 Type safety — Next.js server functions handle mutations (cart updates, checkout session creation) with inferred TypeScript types, so the boundary between server and client is fully typed without a separate API schema.
