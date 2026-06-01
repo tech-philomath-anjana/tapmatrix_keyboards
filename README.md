@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+**TapMatrix**
 
-## Getting Started
+An interactive storefront for mechanical keyboards — built with Next.js, 3D product visualization, and a headless CMS.
 
-First, run the development server:
+**What is TapMatrix?**
+TapMatrix is a product showcase and e-commerce site for mechanical keyboards and components. The goal was to build something that actually does justice to the tactile, visual nature of the hobby — so instead of flat product images, customers can rotate and inspect keyboards in 3D before they buy.
+The project covers the full stack: a content-managed product catalogue, interactive 3D scenes, animated page transitions, and a complete Stripe checkout flow.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+**Features**
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3D product viewer — keyboards rendered with React Three Fiber / three.js, interactive in-browser
+Headless CMS — product listings and page content managed via Prismic Slice Machine; no code change needed to add or update products
+Smooth page transitions — GSAP-powered animations between routes for a polished feel
+Stripe checkout — full payment integration with server-side session creation
+Type-safe end-to-end — Prisma-generated types flow from the database all the way to the UI via Next.js server functions; no manual type maintenance
+Accessible UI primitives — Radix UI for dropdowns, dialogs, and interactive components
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Tech Stack**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Framework — Next.js 15 (App Router)
+Language — TypeScript
+Styling — Tailwind CSS · PostCSS
+3D — React Three Fiber · three.js · Leva (dev controls)
+Animation — GSAP
+CMS — Prismic (Slice Machine)
+UI Primitives — Radix UI
+Payments — Stripe
+Linting — ESLint · Prettier
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Under the hood**
+App Router + Server Components — data fetching happens server-side wherever possible. Prismic queries and product lookups run in server components; only interactive 3D and animation layers are client components.
+Slice Machine — page sections are modelled as Prismic slices. Adding a new content block means defining a slice type and dropping it into the CMS — no new routes, no new components needed.
+Type safety — Next.js server functions handle mutations (cart updates, checkout session creation) with inferred TypeScript types, so the boundary between server and client is fully typed without a separate API schema.
+3D scenes — product models are loaded lazily and rendered inside a <Canvas> with React Three Fiber. Leva controls are stripped in production builds.
